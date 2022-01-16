@@ -1,51 +1,49 @@
-import React from 'react'
+import "./sidebar.css";
+import {
+  LineStyle,
+  Timeline,
+  TrendingUp,
+  PermIdentity,
+  Storefront,
+  AttachMoney,
+  BarChart,
+  MailOutline,
+  DynamicFeed,
+  ChatBubbleOutline,
+  WorkOutline,
+  Report,
+} from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
-import { Link } from 'react-router-dom'
-
-import './sidebar.css'
-
-import logo from '../../assets/images/logo.png'
-
-import sidebar_items from '../../assets/JsonData/sidebar_routes.json'
-
-const SidebarItem = props => {
-
-    const active = props.active ? 'active' : ''
-
-    return (
-        <div className="sidebar__item">
-            <div className={`sidebar__item-inner ${active}`}>
-                <i className={props.icon}></i>
-                <span>
-                    {props.title}
-                </span>
-            </div>
+export default function Sidebar() {
+  return (
+    <div className="sidebar">
+      <div className="sidebarWrapper">
+        <div className="sidebarMenu">
+          <h3 className="sidebarTitle">Dashboard</h3>
+          <ul className="sidebarList">
+            <Link to="/" className="link">
+            <li className="sidebarListItem">
+              <LineStyle className="sidebarIcon" />
+              Home
+            </li>
+            </Link>
+            <Link to="/users" className="link">
+              <li className="sidebarListItem">
+                <PermIdentity className="sidebarIcon" />
+                Users
+              </li>
+            </Link>
+            <Link to="/products" className="link">
+              <li className="sidebarListItem">
+                <Storefront className="sidebarIcon" />
+                Products
+              </li>
+            </Link>
+          
+          </ul>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
-
-const Sidebar = props => {
-
-    const activeItem = sidebar_items.findIndex(item => item.route === props.location.pathname)
-
-    return (
-        <div className='sidebar'>
-            <div className="sidebar__logo">
-                <img src={logo} alt="company logo" />
-            </div>
-            {
-                sidebar_items.map((item, index) => (
-                    <Link to={item.route} key={index}>
-                        <SidebarItem
-                            title={item.display_name}
-                            icon={item.icon}
-                            active={index === activeItem}
-                        />
-                    </Link>
-                ))
-            }
-        </div>
-    )
-}
-
-export default Sidebar
