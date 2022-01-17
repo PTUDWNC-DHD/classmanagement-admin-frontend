@@ -1,55 +1,60 @@
-import "./productList.css";
+import "./adminlist.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
-import { productRows } from "../../dummyData";
+import { userRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-export default function ProductList() {
-  const [data, setData] = useState(productRows);
+export default function AdminList() {
+  const [data, setData] = useState(userRows);
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
   };
-
+  
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "product",
-      headerName: "Product",
+      field: "admin",
+      headerName: "Admin",
       width: 200,
       renderCell: (params) => {
         return (
-          <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="" />
-            {params.row.name}
+          <div className="adminListItem">
+            <img className="adminListImg" src={params.row.avatar} alt="" />
+            {params.row.username}
           </div>
         );
       },
     },
-    { field: "stock", headerName: "Stock", width: 200 },
+    { field: "email", headerName: "Email", width: 200 },
     {
       field: "status",
       headerName: "Status",
       width: 120,
     },
     {
-      field: "price",
-      headerName: "Price",
+      field: "transaction",
+      headerName: "Transaction Volume",
       width: 160,
     },
     {
       field: "action",
       headerName: "Action",
-      width: 150,
+      width: 300,
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row.id}>
-              <button className="productListEdit">Edit</button>
+            <Link to={"/admin/" + params.row.id}>
+              <button className="adminListEdit">Edit</button>
             </Link>
+            <Link to="/newUser">
+              <button className="adminListAdd">Add</button>
+            </Link>
+              <button className="adminListBan">Ban</button>
+              <button className="adminListUnBan">UnBan</button>
             <DeleteOutline
-              className="productListDelete"
+              className="adminListDelete"
               onClick={() => handleDelete(params.row.id)}
             />
           </>
@@ -59,12 +64,12 @@ export default function ProductList() {
   ];
 
   return (
-    <div className="productList">
+    <div className="adminList">
+      
       <DataGrid
         rows={data}
         disableSelectionOnClick
         columns={columns}
-        pageSize={8}
         checkboxSelection
       />
     </div>

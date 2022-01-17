@@ -74,18 +74,7 @@ const LoginForm = () => {
     
   }
 
-  function Copyright(props) {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
+ 
 
   return (
     
@@ -102,7 +91,6 @@ const LoginForm = () => {
                         alignItems: 'center',
                       }}
                     >
-                      <Avatar src="../logo512.png"  variant="square"/>
                 
                       <Typography component="h1" variant="h5">
                         Sign in
@@ -157,16 +145,7 @@ const LoginForm = () => {
                             </Link>
                           </Grid>
                         </Grid>
-                        <Button
-                      type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        onClick={(e) => {handleLogin(e, 'google')}}
-                        color="success"
-                      >
-                        Login with Google Account
-                      </Button>
+                        
                       </Box>
                     </Box>
                   </Paper>

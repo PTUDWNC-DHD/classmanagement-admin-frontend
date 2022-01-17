@@ -3,13 +3,14 @@ import { NonAuthRequired, AuthRequired } from "./authRoute";
 
 
 
-import Home from "../pages/home/Home";
-import { BrowserRouter , Routes, Route } from "react-router-dom";
+import AdminList from "../pages/adminList/AdminList";
+import { Routes, Route } from "react-router-dom";
 import UserList from "../pages/userList/UserList";
 import User from "../pages/user/User";
+import Admin from "../pages/admin/admin";
 import NewUser from "../pages/newUser/NewUser";
-import ProductList from "../pages/productList/ProductList";
-import Product from "../pages/product/Product";
+import ClassList from "../pages/classList/ClassList";
+import Class from "../pages/class/Class";
 import NewProduct from "../pages/newProduct/NewProduct";
 import LoginPage from '../pages/LoginPage';
 
@@ -21,44 +22,49 @@ const AppRouter = ()=>{
       <Routes>
         
           <Route exact path="/" element={
-            <AuthRequired>
-              <Home/>
-            </AuthRequired>
+            
+              <AdminList/>
+            
           }/>
           <Route exact path="/login" element={
-            <NonAuthRequired>
+           
               <LoginPage/>
-            </NonAuthRequired>
+            
           }/>
+          <Route exact path="/admin/:userId" element={
+            
+            <Admin/>
+          
+        }/>
           <Route exact path="/users" element={
-            <AuthRequired>
+            
               <UserList/>
-            </AuthRequired>
+            
           }/>
           <Route exact path="/user/:userId" element={
-            <AuthRequired>
+            
               <User/>
-            </AuthRequired>
+            
           }/>
           <Route exact path="/newUser" element={
-            <AuthRequired>
+            
               <NewUser/>
-            </AuthRequired>
+           
           }/>
-          <Route exact path="/products" element={
-            <AuthRequired>
-              <ProductList/>
-            </AuthRequired>
+          <Route exact path="/classes" element={
+           
+              <ClassList/>
+           
           }/>
-          <Route exact path="/product/:productId" element={
-            <AuthRequired>
-              <Product/>
-            </AuthRequired>
+          <Route exact path="/class/:productId" element={
+           
+              <Class/>
+           
           }/>
           <Route exact path="/newproduct" element={
-            <AuthRequired>
+          
               <NewProduct/>
-            </AuthRequired>
+            
           }/>
           
         </Routes>
