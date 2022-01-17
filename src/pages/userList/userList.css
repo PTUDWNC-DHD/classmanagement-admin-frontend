@@ -2,7 +2,7 @@
   flex: 4;
 }
 
-.userListUser {
+.userListItem {
   display: flex;
   align-items: center;
 }
@@ -55,4 +55,7 @@
   color: white;
   cursor: pointer;
   margin-right: 20px;
+}
+.tableHead{
+  
 }

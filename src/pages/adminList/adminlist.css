@@ -1,8 +1,9 @@
 .adminList {
     flex: 4;
+    background-image: linear-gradient(to right, White );
   }
   
-  .adminListUser {
+  .adminListItem {
     display: flex;
     align-items: center;
   }

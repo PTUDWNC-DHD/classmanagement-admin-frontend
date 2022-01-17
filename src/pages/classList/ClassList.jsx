@@ -1,75 +1,86 @@
 import "./classList.css";
-import { DataGrid } from "@material-ui/data-grid";
-import { DeleteOutline } from "@material-ui/icons";
-import { productRows } from "../../dummyData";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, CircularProgress, Avatar, ListItemAvatar,Checkbox,TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { useState, Fragment,  useContext, useEffect  } from "react";
+import { fetchGetClassList } from '../../services/classService';
+import AuthContext from '../../contexts/authContext';
 
 export default function ClassList() {
-  const [data, setData] = useState(productRows);
+  const { currentUser } = useContext(AuthContext)
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [classes, setClasses] = useState([]);
+ 
+  
+  
+  const callFetchAllClasses = async(token) => {
+    setIsLoading(true);
+    const result = await fetchGetClassList(token);
+    
+    if (result.data) {
+      setClasses(result.data)
+    }
+    else if (result.error) {
+      setErrorMessage(result.error)
+    }
+    setIsLoading(false);
+  }
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
-  };
+  useEffect(() => {
+    callFetchAllClasses(currentUser.token)
+  }, [])
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: "class",
-      headerName: "Class",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="" />
-            {params.row.name}
-          </div>
-        );
-      },
-    },
-    { field: "stock", headerName: "Stock", width: 200 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      width: 160,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 180,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={"/class/" + params.row.id}>
-              <button className="productListEdit">Edit</button>
-            </Link>
-            <Link to="/newproduct">
-              <button className="productListAdd">Create</button>
-            </Link>
-            <DeleteOutline
-              className="productListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
-          </>
-        );
-      },
-    },
-  ];
+  if (errorMessage) {
+    return <div>Error: {errorMessage}</div>;
+  } 
+  else if (isLoading) {
+    return(
+      <div className="center-parent">
+        <CircularProgress  />
+      </div>
+    )
+  } 
+ 
 
   return (
     <div className="productList">
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={8}
-        checkboxSelection
-      />
+      <Fragment>
+     
+        <Table size="small" >
+          <TableHead>
+          
+            <TableRow>
+              <TableCell>
+              
+                <ListItemText><TableSortLabel>
+                
+                <h4>Name</h4></TableSortLabel></ListItemText></TableCell>
+              
+              <TableCell><ListItemText><h4>Invite</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Ended</h4></ListItemText></TableCell>
+              
+              <TableCell><ListItemText><h4>Create Time</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Action</h4></ListItemText></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!classes.length ? <TableRow><TableCell>Class has no teacher</TableCell></TableRow> :
+            classes.map((classe) => (
+              <TableRow>
+                <TableCell><ListItemText>{classe.name}</ListItemText></TableCell>
+                
+                <TableCell><ListItemText>{classe.invite}</ListItemText></TableCell>
+                <TableCell><Checkbox checked={classe.isEnded}/></TableCell>
+                <TableCell><ListItemText>{classe.createdAt}</ListItemText></TableCell>
+                <TableCell>
+                <Link href={`/class/${classe._id}`}>
+                    <button className="userListEdit">Detail</button>
+                 </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Fragment>
     </div>
   );
 }

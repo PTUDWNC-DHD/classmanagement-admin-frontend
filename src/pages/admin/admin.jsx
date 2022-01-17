@@ -1,121 +1,121 @@
-import {
-  CalendarToday,
-  LocationSearching,
-  MailOutline,
-  PermIdentity,
-  PhoneAndroid,
-  Publish,
-} from "@material-ui/icons";
-import { Link } from "react-router-dom";
-import "./admin.css";
+import { useState, useContext, useEffect } from 'react';
 
-export default function Admin() {
+import { useParams } from "react-router-dom"
+import { Link,  Container, Box,  Card, CardContent, CardHeader, Divider, Grid, TextField, Avatar, Typography } from '@mui/material';
+
+import { fetchGetAdmin } from '../../services/adminService';
+
+import AuthContext from '../../contexts/authContext'
+
+
+
+
+
+const Admin = () => {
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const params = useParams();
+  const id= params?.id
+  const [admins, setAdmins] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const callFetchAdmins = async(token,id) => {
+    setIsLoading(true);
+    const result = await fetchGetAdmin(token,id);
+    console.log(result);
+    if (result.data) {
+      setAdmins(result.data)
+    }
+    else if (result.error) {
+      setErrorMessage(result.error)
+    }
+    setIsLoading(false);
+  }
+  useEffect(() => {
+    callFetchAdmins(currentUser.token, id)
+  }, [])
+    
+    
+  
+  
   return (
-    <div className="admin">
-      <div className="adminTitleContainer">
-        <h1 className="adminTitle">Edit User</h1>
-        
-      </div>
-      <div className="adminContainer">
-        <div className="adminShow">
-          <div className="adminShowTop">
-            <img
-              src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt=""
-              className="adminShowImg"
-            />
-            <div className="adminShowTopTitle">
-              <span className="adminShowUsername">Anna Becker</span>
-              <span className="adminShowUserTitle">Software Engineer</span>
-            </div>
-          </div>
-          <div className="adminShowBottom">
-            <span className="adminShowTitle">Account Details</span>
-            <div className="adminShowInfo">
-              <PermIdentity className="adminShowIcon" />
-              <span className="adminShowInfoTitle">annabeck99</span>
-            </div>
-            <div className="adminShowInfo">
-              <CalendarToday className="adminShowIcon" />
-              <span className="adminShowInfoTitle">10.12.1999</span>
-            </div>
-            <span className="adminShowTitle">Contact Details</span>
-            <div className="adminShowInfo">
-              <PhoneAndroid className="adminShowIcon" />
-              <span className="adminShowInfoTitle">+1 123 456 67</span>
-            </div>
-            <div className="adminShowInfo">
-              <MailOutline className="adminShowIcon" />
-              <span className="adminShowInfoTitle">annabeck99@gmail.com</span>
-            </div>
-            <div className="adminShowInfo">
-              <LocationSearching className="adminShowIcon" />
-              <span className="adminShowInfoTitle">New York | USA</span>
-            </div>
-          </div>
-        </div>
-        <div className="adminUpdate">
-          <span className="adminUpdateTitle">Edit</span>
-          <form className="adminUpdateForm">
-            <div className="adminUpdateLeft">
-              <div className="adminUpdateItem">
-                <label>Username</label>
-                <input
-                  type="text"
-                  placeholder="annabeck99"
-                  className="adminUpdateInput"
+    <Container>
+      <Card>
+        <CardHeader title="Profile" />
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} >
+          <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Full Name:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="name"
+                  value={admins.name}
                 />
-              </div>
-              <div className="adminUpdateItem">
-                <label>Full Name</label>
-                <input
-                  type="text"
-                  placeholder="Anna Becker"
-                  className="adminUpdateInput"
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Email:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="email"
+                  value={admins.email}
                 />
-              </div>
-              <div className="adminUpdateItem">
-                <label>Email</label>
-                <input
-                  type="text"
-                  placeholder="annabeck99@gmail.com"
-                  className="adminUpdateInput"
+            </Grid>
+                <Grid item md={6} xs={12} >
+                <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Role:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="role"
+                  value={admins.role}
                 />
-              </div>
-              <div className="adminUpdateItem">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  placeholder="+1 123 456 67"
-                  className="adminUpdateInput"
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Username:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="username"
+                  value={admins.username}
                 />
-              </div>
-              <div className="adminUpdateItem">
-                <label>Address</label>
-                <input
-                  type="text"
-                  placeholder="New York | USA"
-                  className="adminUpdateInput"
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Create Time:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="createAt"
+                  value={admins.createdAt}
                 />
-              </div>
-            </div>
-            <div className="adminUpdateRight">
-              <div className="adminUpdateUpload">
-                <img
-                  className="adminUpdateImg"
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                />
-                <label htmlFor="file">
-                  <Publish className="adminUpdateIcon" />
-                </label>
-                <input type="file" id="file" style={{ display: "none" }} />
-              </div>
-              <button className="adminUpdateButton">Update</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            p: 2
+          }}
+        >
+          <Link href={`/`}>
+            <button className="userListEdit">Back</button>
+          </Link>
+        </Box>
+      </Card>
+    </Container>
   );
-}
+};
+
+export default Admin;

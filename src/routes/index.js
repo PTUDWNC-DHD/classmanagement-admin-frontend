@@ -8,12 +8,12 @@ import { Routes, Route } from "react-router-dom";
 import UserList from "../pages/userList/UserList";
 import User from "../pages/user/User";
 import Admin from "../pages/admin/admin";
-import NewUser from "../pages/newUser/NewUser";
+import NewAdmin from "../pages/newAdmin/NewAdmin";
 import ClassList from "../pages/classList/ClassList";
 import Class from "../pages/class/Class";
-import NewProduct from "../pages/newProduct/NewProduct";
 import LoginPage from '../pages/LoginPage';
-
+import Sidebar from "../components/sidebar/Sidebar";
+import Topbar from "../components/topbar/Topbar";
 
 
 const AppRouter = ()=>{
@@ -22,49 +22,73 @@ const AppRouter = ()=>{
       <Routes>
         
           <Route exact path="/" element={
-            
-              <AdminList/>
-            
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                        <AdminList/>
+                    </div>
+            </AuthRequired>
           }/>
           <Route exact path="/login" element={
-           
+             <NonAuthRequired>  
               <LoginPage/>
-            
+            </NonAuthRequired>
           }/>
-          <Route exact path="/admin/:userId" element={
-            
-            <Admin/>
-          
+          <Route exact path="/admin/:id" element={
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                         <Admin/>
+                    </div>
+            </AuthRequired>
         }/>
           <Route exact path="/users" element={
-            
-              <UserList/>
-            
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                        <UserList/>
+                    </div>
+            </AuthRequired>
           }/>
-          <Route exact path="/user/:userId" element={
-            
-              <User/>
-            
+          <Route exact path="/user/:id" element={
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                        <User />
+                    </div>
+            </AuthRequired>
           }/>
-          <Route exact path="/newUser" element={
-            
-              <NewUser/>
-           
+          <Route exact path="/newAdmin" element={
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                        <NewAdmin/>
+                    </div>
+            </AuthRequired>
           }/>
           <Route exact path="/classes" element={
-           
-              <ClassList/>
-           
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                        <ClassList/>
+                    </div>
+            </AuthRequired>
           }/>
-          <Route exact path="/class/:productId" element={
-           
-              <Class/>
-           
-          }/>
-          <Route exact path="/newproduct" element={
-          
-              <NewProduct/>
-            
+          <Route exact path="/class/:id" element={
+            <AuthRequired>
+                <Topbar />
+                    <div className="container">
+                        <Sidebar />
+                        <Class/>
+                    </div>
+            </AuthRequired>
+
           }/>
           
         </Routes>

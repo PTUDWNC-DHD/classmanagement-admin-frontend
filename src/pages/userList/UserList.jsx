@@ -1,77 +1,105 @@
 import "./userList.css";
-import { DataGrid } from "@material-ui/data-grid";
-import { DeleteOutline } from "@material-ui/icons";
-import { userRows } from "../../dummyData";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+
+import { Link, CircularProgress, Avatar, ListItemAvatar,Checkbox,TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+
+import { Fragment, useState, useContext, useEffect, React } from "react";
+import { fetchGetUserList, fetchPatchUser } from '../../services/userService';
+import AuthContext from '../../contexts/authContext';
+
+
 
 export default function UserList() {
-  const [data, setData] = useState(userRows);
-
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
-  };
+ 
+  const { currentUser } = useContext(AuthContext)
   
-  const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: "user",
-      headerName: "User",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
-            {params.row.username}
-          </div>
-        );
-      },
-    },
-    { field: "email", headerName: "Email", width: 200 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
-    {
-      field: "transaction",
-      headerName: "Transaction Volume",
-      width: 160,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 300,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Edit</button>
-            </Link>
-            <Link to="/newUser">
-              <button className="userListAdd">Add</button>
-            </Link>
-              <button className="userListBan">Ban</button>
-              <button className="userListUnBan">UnBan</button>
-            <DeleteOutline
-              className="userListDelete"
-              onClick={() => handleDelete(params.row.id)}
-            />
-          </>
-        );
-      },
-    },
-  ];
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState([]);
 
+  
+  const callFetchAllUsers = async(token) => {
+    setIsLoading(true);
+    const result = await fetchGetUserList(token);
+    
+    if (result.data) {
+      setUsers(result.data)
+    }
+    else if (result.error) {
+      setErrorMessage(result.error)
+    }
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    callFetchAllUsers(currentUser.token)
+  }, [])
+
+  if (errorMessage) {
+    return <div>Error: {errorMessage}</div>;
+  } 
+  else if (isLoading) {
+    return(
+      <div className="center-parent">
+        <CircularProgress  />
+      </div>
+    )
+  } 
+  
+  const HandleLockClick = async (id,isLock) => {
+    const result = await fetchPatchUser(currentUser.token,id,{isLock})
+    console.log(id,isLock, result);
+    const newUsers = users.map(x=>{
+      if (x._id==id) {
+        x.isLock=!x.isLock;
+        
+      }
+      return x;
+    })
+    setUsers(newUsers);
+  }
+  
   return (
     <div className="userList">
+      <Fragment>
       
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        checkboxSelection
-      />
+        <Table size="small" >
+          <TableHead className="tableHead">
+          
+            <TableRow>
+              <TableCell>
+              
+                <ListItemText><TableSortLabel>
+                
+                <h4>Name</h4></TableSortLabel></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Email</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Student Id</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Active</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Lock</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Create Time</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><h4>Action</h4></ListItemText></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!users.length ? <TableRow><TableCell>Don't have User</TableCell></TableRow> :
+            users.map((user) => (
+              <TableRow>
+                <TableCell><ListItemText>{user.name}</ListItemText></TableCell>
+                <TableCell><ListItemText>{user.email}</ListItemText></TableCell>
+                <TableCell><ListItemText>{user.studentId}</ListItemText></TableCell>
+                <TableCell><Checkbox  checked={user.isActive} /></TableCell>
+                <TableCell><Checkbox onChange={()=>{HandleLockClick(user._id,!user.isLock)}} checked={user.isLock}/></TableCell>
+                <TableCell><ListItemText>{user.createdAt}</ListItemText></TableCell>
+                <TableCell>
+                  <Link href={`/user/${user._id}`}>
+                    <button className="userListEdit">Detail</button>
+                    </Link>
+                  
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Fragment>
     </div>
   );
 }

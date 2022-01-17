@@ -1,68 +1,109 @@
 
-import "./class.css";
-import { Publish } from "@material-ui/icons";
+import { useState, useContext, useEffect } from 'react';
 
-export default function Class() {
+import { useParams } from "react-router-dom"
+import { Link, Checkbox, Container, Box, Card, CardContent, CardHeader, Divider, Grid, TextField, Avatar, Typography } from '@mui/material';
+
+import { fetchGetClass } from '../../services/classService';
+
+import AuthContext from '../../contexts/authContext'
+
+
+
+
+
+const Class = () => {
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const params = useParams();
+  const id= params?.id
+  const [classes, setClasses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const callFetchClasses = async(token,id) => {
+    setIsLoading(true);
+    const result = await fetchGetClass(token,id);
+    console.log(result);
+    if (result.data) {
+      setClasses(result.data)
+    }
+    else if (result.error) {
+      setErrorMessage(result.error)
+    }
+    setIsLoading(false);
+  }
+  useEffect(() => {
+    callFetchClasses(currentUser.token, id)
+  }, [])
+    
+    
+  
+  
   return (
-    <div className="product">
-      <div className="productTitleContainer">
-        <h1 className="productTitle">Product</h1>
-       
-      </div>
-      <div className="productTop">
-          <div className="productTopRight">
-              <div className="productInfoTop">
-                  <img src="https://images.pexels.com/photos/7156886/pexels-photo-7156886.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" className="productInfoImg" />
-                  <span className="productName">Apple Airpods</span>
-              </div>
-              <div className="productInfoBottom">
-                  <div className="productInfoItem">
-                      <span className="productInfoKey">id:</span>
-                      <span className="productInfoValue">123</span>
-                  </div>
-                  <div className="productInfoItem">
-                      <span className="productInfoKey">sales:</span>
-                      <span className="productInfoValue">5123</span>
-                  </div>
-                  <div className="productInfoItem">
-                      <span className="productInfoKey">active:</span>
-                      <span className="productInfoValue">yes</span>
-                  </div>
-                  <div className="productInfoItem">
-                      <span className="productInfoKey">in stock:</span>
-                      <span className="productInfoValue">no</span>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div className="productBottom">
-          <form className="productForm">
-              <div className="productFormLeft">
-                  <label>Product Name</label>
-                  <input type="text" placeholder="Apple AirPod" />
-                  <label>In Stock</label>
-                  <select name="inStock" id="idStock">
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
-                  <label>Active</label>
-                  <select name="active" id="active">
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
-              </div>
-              <div className="productFormRight">
-                  <div className="productUpload">
-                      <img src="https://images.pexels.com/photos/7156886/pexels-photo-7156886.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" className="productUploadImg" />
-                      <label for="file">
-                          <Publish/>
-                      </label>
-                      <input type="file" id="file" style={{display:"none"}} />
-                  </div>
-                  <button className="productButton">Update</button>
-              </div>
-          </form>
-      </div>
-    </div>
+    <Container>
+      <Card>
+        <CardHeader title="Profile" />
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} >
+          <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Name:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="name"
+                  value={classes.name}
+                />
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Invite:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="invite"
+                  value={classes.invite}
+                />
+            </Grid>
+                
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Create Time:</Typography>
+                </Box>
+              <TextField
+                  required
+                  fullWidth
+                  name="studentId"
+                  value={classes.createdAt}
+                />
+            </Grid>
+            <Grid item md={6} xs={12} >
+                <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Ended:</Typography>
+                  <Checkbox checked={classes.isEnded}/>
+                </Box>
+              
+            </Grid>
+            
+          </Grid>
+        </CardContent>
+        <Divider />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            p: 2
+          }}
+        >
+          <Link href={`/classes`}>
+            <button className="classListEdit">Back</button>
+          </Link>
+        </Box>
+      </Card>
+    </Container>
   );
-}
+};
+
+export default Class;

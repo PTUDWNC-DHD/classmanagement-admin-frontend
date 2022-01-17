@@ -1,13 +1,13 @@
-.newUser {
+.newAdmin {
   flex: 4;
 }
 
-.newUserForm {
+.newAdminForm {
   display: flex;
   flex-wrap: wrap;
 }
 
-.newUserItem {
+.newAdminItem {
   width: 400px;
   display: flex;
   flex-direction: column;
@@ -15,36 +15,36 @@
   margin-right: 20px;
 }
 
-.newUserItem > label {
+.newAdminItem > label {
   margin-bottom: 10px;
   font-size: 14px;
   font-weight: 600;
   color: rgb(151, 150, 150);
 }
 
-.newUserItem > input {
+.newAdminItem > input {
   height: 20px;
   padding: 10px;
   border: 1px solid gray;
   border-radius: 5px;
 }
 
-.newUserGender > input {
+.newAdminGender > input {
   margin-top: 15px;
 }
 
-.newUserGender>label{
+.newAdminGender>label{
     margin: 10px;
     font-size: 18px;
     color: #555;
 }
 
-.newUserSelect{
+.newAdminSelect{
     height: 40px;
     border-radius: 5px;
 }
 
-.newUserButton{
+.newAdminButton{
     width: 200px;
     border: none;
     background-color: darkblue;

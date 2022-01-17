@@ -1,121 +1,122 @@
-import {
-  CalendarToday,
-  LocationSearching,
-  MailOutline,
-  PermIdentity,
-  PhoneAndroid,
-  Publish,
-} from "@material-ui/icons";
-import { Link } from "react-router-dom";
-import "./user.css";
+import { useState, useContext, useEffect } from 'react';
 
-export default function User() {
+import { useParams } from "react-router-dom"
+import { Link,  Container, Box,  Card, CardContent, CardHeader, Divider, Grid, TextField,  Typography } from '@mui/material';
+
+import { fetchGetUser, fetchPatchUser } from '../../services/userService';
+
+import AuthContext from '../../contexts/authContext'
+
+
+
+
+
+
+const User = () => {
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const params = useParams();
+  const id= params?.id
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const callFetchUsers = async(token,id) => {
+    setIsLoading(true);
+    const result = await fetchGetUser(token,id);
+    console.log(result);
+    if (result.data) {
+      setUsers(result.data)
+    }
+    else if (result.error) {
+      setErrorMessage(result.error)
+    }
+    setIsLoading(false);
+  }
+  useEffect(() => {
+    callFetchUsers(currentUser.token, id)
+  }, [])
+    
+  const HandleChangeStudentId=(value)=> {
+    setUsers({...users,studentId:value}
+    )
+  }
+  const SaveClick= async()=>{
+    const result = await fetchPatchUser(currentUser.token,id,{studentId:users.studentId})
+    console.log(result)
+  } 
+  
   return (
-    <div className="user">
-      <div className="userTitleContainer">
-        <h1 className="userTitle">Edit User</h1>
-        
-      </div>
-      <div className="userContainer">
-        <div className="userShow">
-          <div className="userShowTop">
-            <img
-              src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt=""
-              className="userShowImg"
-            />
-            <div className="userShowTopTitle">
-              <span className="userShowUsername">Anna Becker</span>
-              <span className="userShowUserTitle">Software Engineer</span>
-            </div>
-          </div>
-          <div className="userShowBottom">
-            <span className="userShowTitle">Account Details</span>
-            <div className="userShowInfo">
-              <PermIdentity className="userShowIcon" />
-              <span className="userShowInfoTitle">annabeck99</span>
-            </div>
-            <div className="userShowInfo">
-              <CalendarToday className="userShowIcon" />
-              <span className="userShowInfoTitle">10.12.1999</span>
-            </div>
-            <span className="userShowTitle">Contact Details</span>
-            <div className="userShowInfo">
-              <PhoneAndroid className="userShowIcon" />
-              <span className="userShowInfoTitle">+1 123 456 67</span>
-            </div>
-            <div className="userShowInfo">
-              <MailOutline className="userShowIcon" />
-              <span className="userShowInfoTitle">annabeck99@gmail.com</span>
-            </div>
-            <div className="userShowInfo">
-              <LocationSearching className="userShowIcon" />
-              <span className="userShowInfoTitle">New York | USA</span>
-            </div>
-          </div>
-        </div>
-        <div className="userUpdate">
-          <span className="userUpdateTitle">Edit</span>
-          <form className="userUpdateForm">
-            <div className="userUpdateLeft">
-              <div className="userUpdateItem">
-                <label>Username</label>
-                <input
-                  type="text"
-                  placeholder="annabeck99"
-                  className="userUpdateInput"
+    <Container>
+      <Card>
+        <CardHeader title="Profile" />
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} >
+          <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Full Name:</Typography>
+                </Box>
+              <TextField
+                  disabled
+                  required
+                  fullWidth
+                  name="email"
+                  value={users.name}
                 />
-              </div>
-              <div className="userUpdateItem">
-                <label>Full Name</label>
-                <input
-                  type="text"
-                  placeholder="Anna Becker"
-                  className="userUpdateInput"
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Email:</Typography>
+                </Box>
+              <TextField
+                  disabled
+                  required
+                  fullWidth
+                  name="email"
+                  value={users.email}
                 />
-              </div>
-              <div className="userUpdateItem">
-                <label>Email</label>
-                <input
-                  type="text"
-                  placeholder="annabeck99@gmail.com"
-                  className="userUpdateInput"
+            </Grid>
+                <Grid item md={6} xs={12} >
+                <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Student Id:</Typography>
+                </Box>
+              <TextField
+                  onChange={(e)=>HandleChangeStudentId(e.target.value)}
+                  required
+                  fullWidth
+                  name="studentId"
+                  value={users.studentId}
                 />
-              </div>
-              <div className="userUpdateItem">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  placeholder="+1 123 456 67"
-                  className="userUpdateInput"
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Create Time:</Typography>
+                </Box>
+              <TextField
+                  disabled
+                  required
+                  fullWidth
+                  name="createAt"
+                  value={users.createdAt}
                 />
-              </div>
-              <div className="userUpdateItem">
-                <label>Address</label>
-                <input
-                  type="text"
-                  placeholder="New York | USA"
-                  className="userUpdateInput"
-                />
-              </div>
-            </div>
-            <div className="userUpdateRight">
-              <div className="userUpdateUpload">
-                <img
-                  className="userUpdateImg"
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                />
-                <label htmlFor="file">
-                  <Publish className="userUpdateIcon" />
-                </label>
-                <input type="file" id="file" style={{ display: "none" }} />
-              </div>
-              <button className="userUpdateButton">Update</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            p: 2
+          }}
+        >
+          <Link href={`/users`}>
+            <button className="userListEdit">Back</button>
+          </Link>
+          <button onClick={SaveClick} color="primary" className="userListEdit">Save</button>
+        </Box>
+      </Card>
+    </Container>
   );
-}
+};
+
+export default User;
