@@ -1,6 +1,3 @@
-import * as Notifications from '../utils/notifications'
-
-
 const fetchLogin = (usernameToFetch, passwordToFetch) => {
   return fetch(process.env.REACT_APP_API_URL+'/login', {
     method: 'POST',
@@ -18,14 +15,14 @@ const fetchLogin = (usernameToFetch, passwordToFetch) => {
       return res.json().then((result) => {
         //console.log('result: ', result)
         if (!result)
-          return { error: Notifications.API_RETURN_NULL_RESULT}
+          return { error: "No data"}
         else if (result.errors)
           return { error: result.errors}
         else
           return { data: result }
       })
     else
-      return { error: Notifications.LOGIN_FAILED }
+      return { error: "Login failed" }
   })
   .catch((error) => {
     //console.log('error: ', error)
