@@ -89,6 +89,18 @@ const User = () => {
             </Grid>
             <Grid item md={6} xs={12} >
             <Box sx={{ display: 'flex'}}>
+                  <Typography sx={{ mr: 12}}>Contact:</Typography>
+                </Box>
+              <TextField
+                  disabled
+                  required
+                  fullWidth
+                  name="contact"
+                  value={users.contact}
+                />
+            </Grid>
+            <Grid item md={6} xs={12} >
+            <Box sx={{ display: 'flex'}}>
                   <Typography sx={{ mr: 12}}>Create Time:</Typography>
                 </Box>
               <TextField

@@ -49,6 +49,7 @@ const Admin = () => {
                   <Typography sx={{ mr: 12}}>Full Name:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="name"
@@ -60,6 +61,7 @@ const Admin = () => {
                   <Typography sx={{ mr: 12}}>Email:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="email"
@@ -71,6 +73,7 @@ const Admin = () => {
                   <Typography sx={{ mr: 12}}>Role:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="role"
@@ -82,6 +85,7 @@ const Admin = () => {
                   <Typography sx={{ mr: 12}}>Username:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="username"
@@ -93,6 +97,7 @@ const Admin = () => {
                   <Typography sx={{ mr: 12}}>Create Time:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="createAt"
