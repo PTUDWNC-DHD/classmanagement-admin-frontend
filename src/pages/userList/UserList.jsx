@@ -1,6 +1,6 @@
 import "./userList.css";
 
-import { Link, CircularProgress, Avatar, ListItemAvatar,Checkbox,TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { Link, CircularProgress, Avatar, ListItemAvatar,Checkbox,TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead, Input, Button } from "@mui/material";
 
 import { Fragment, useState, useContext, useEffect, React } from "react";
 import { fetchGetUserList, fetchPatchUser } from '../../services/userService';
@@ -15,6 +15,7 @@ export default function UserList() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const [searchWord, setSearchWord] = useState("");
 
   
   const callFetchAllUsers = async(token) => {
@@ -58,10 +59,23 @@ export default function UserList() {
     setUsers(newUsers);
   }
   
+  const searchHandle = async () => {
+    let result = await fetchGetUserList(currentUser.token);
+    if (result.error) {
+      return setUsers(null);
+    }
+    if (searchWord.length == 0) {
+      return setUsers(result.data)
+    }
+    result.data = result.data.filter(x => x.name?.toLowerCase().includes(searchWord) || x.email?.toLowerCase().includes(searchWord))
+    return setUsers(result.data)
+  }
+
   return (
     <div className="userList">
+      <Input value={searchWord} onChange={e => setSearchWord(e.target.value)} />
+      <Button onClick={searchHandle}>Search</Button>
       <Fragment>
-      
         <Table size="small" >
           <TableHead className="tableHead">
           

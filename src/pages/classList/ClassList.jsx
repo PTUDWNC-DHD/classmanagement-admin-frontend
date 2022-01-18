@@ -1,5 +1,5 @@
 import "./classList.css";
-import { Link, CircularProgress, Avatar, ListItemAvatar,Checkbox,TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { Link, CircularProgress, Avatar, ListItemAvatar,Checkbox,TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead, Input, Button } from "@mui/material";
 import { useState, Fragment,  useContext, useEffect  } from "react";
 import { fetchGetClassList } from '../../services/classService';
 import AuthContext from '../../contexts/authContext';
@@ -9,8 +9,7 @@ export default function ClassList() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [classes, setClasses] = useState([]);
- 
-  
+  const [searchWord, setSearchWord] = useState("");
   
   const callFetchAllClasses = async(token) => {
     setIsLoading(true);
@@ -40,9 +39,22 @@ export default function ClassList() {
     )
   } 
  
+  const searchHandle = async () => {
+    let result = await fetchGetClassList(currentUser.token);
+    if (result.error) {
+      return setClasses(null);
+    }
+    if (searchWord.length == 0) {
+      return setClasses(result.data)
+    }
+    result.data = result.data.filter(x => x.name?.toLowerCase().includes(searchWord) || x.email?.toLowerCase().includes(searchWord))
+    return setClasses(result.data)
+  }
 
   return (
     <div className="productList">
+      <Input value={searchWord} onChange={e => setSearchWord(e.target.value)} />
+      <Button onClick={searchHandle}>Search</Button>
       <Fragment>
      
         <Table size="small" >

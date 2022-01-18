@@ -1,5 +1,5 @@
 import "./adminlist.css";
-import { Link,CircularProgress, TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { Link,CircularProgress, TableSortLabel, ListItemText, Table, TableBody, TableCell, TableRow, TableHead, Input, Button } from "@mui/material";
 import { Fragment, useState, useContext, useEffect } from "react";
 import { fetchGetAdminList } from '../../services/adminService';
 import AuthContext from '../../contexts/authContext';
@@ -12,6 +12,7 @@ export default function AdminList() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [admins, setAdmins] = useState([]);
+  const [searchWord, setSearchWord] = useState("");
   
 
   const callFetchAllAdmins = async(token) => {
@@ -43,10 +44,24 @@ export default function AdminList() {
     )
   } 
 
-  
+  const searchHandle = async () => {
+    console.log(true);
+    let result = await fetchGetAdminList(currentUser.token);
+    console.log(result);
+    if (result.error) {
+      return setAdmins(null);
+    }
+    if (searchWord.length == 0) {
+      return setAdmins(result.data)
+    }
+    result.data = result.data.filter(x => x.name?.toLowerCase().includes(searchWord) || x.email?.toLowerCase().includes(searchWord))
+    return setAdmins(result.data)
+  }
 
   return (
     <div className="adminList">
+      <Input value={searchWord} onChange={e => setSearchWord(e.target.value)} />
+      <Button onClick={searchHandle}>Search</Button>
       <Fragment>
         <Link href="/newAdmin">
           <button className="adminListAdd">Add</button>
