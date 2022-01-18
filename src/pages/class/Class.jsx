@@ -50,6 +50,7 @@ const Class = () => {
                   <Typography sx={{ mr: 12}}>Name:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="name"
@@ -61,6 +62,7 @@ const Class = () => {
                   <Typography sx={{ mr: 12}}>Invite:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="invite"
@@ -73,6 +75,7 @@ const Class = () => {
                   <Typography sx={{ mr: 12}}>Create Time:</Typography>
                 </Box>
               <TextField
+                  disabled
                   required
                   fullWidth
                   name="studentId"

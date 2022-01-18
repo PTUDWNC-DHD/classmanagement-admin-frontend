@@ -45,7 +45,7 @@ export default function NewAdmin() {
         
         Swal.fire({
           title: "Success",
-          text: Notifications.CREATE_CLASS_SUCCESS,
+          text: "Create Admin account success",
           icon: "success",
           button: "Close",
         });
@@ -53,7 +53,7 @@ export default function NewAdmin() {
       else if (result.error) {
         Swal.fire({
           title: "Error",
-          text: Notifications.CREATE_CLASS_FAILED,
+          text: "Create Admin account failed",
           icon: "error",
           button: "Close",
         });

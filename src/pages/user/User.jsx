@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 import { useParams } from "react-router-dom"
 import { Link,  Container, Box,  Card, CardContent, CardHeader, Divider, Grid, TextField,  Typography } from '@mui/material';
@@ -42,6 +43,22 @@ const User = () => {
   const SaveClick= async()=>{
     const result = await fetchPatchUser(currentUser.token,id,{studentId:users.studentId})
     console.log(result)
+    if (result.data) {
+      Swal.fire({
+        title: "Success",
+        text: "Change StudentId success",
+        icon: "success",
+        button: "Close",
+      });
+    }
+    if (result.error) {
+      Swal.fire({
+        title: "Error",
+        text: "Change StudentId failed",
+        icon: "error",
+        button: "Close",
+      });
+    }
   } 
   
   return (
