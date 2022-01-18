@@ -89,8 +89,8 @@ const fetchPostAdmin = (token, {username, password, name, role, email}) => {
         })
 }
 
-const fetchPatchAdmin = (token, data) => {
-    return fetch(process.env.REACT_APP_API_URL + "/admin/", {
+const fetchPatchAdmin = (token, id, data) => {
+    return fetch(process.env.REACT_APP_API_URL + "/admin/" + id, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

@@ -49,6 +49,7 @@ export default function UserList() {
   } 
   
   const HandleLockClick = async (id,isLock) => {
+    console.log(currentUser.token,id,{isLock});
     const result = await fetchPatchUser(currentUser.token,id,{isLock})
     console.log(id,isLock, result);
     const newUsers = users.map(x=>{

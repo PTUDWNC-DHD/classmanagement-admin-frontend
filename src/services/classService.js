@@ -85,8 +85,8 @@ const fetchPostClass = (token, {name, ownerId}) => {
         })
 }
 
-const fetchPatchClass = (token, data) => {
-    return fetch(process.env.REACT_APP_API_URL + "/class/", {
+const fetchPatchClass = (token, id, data) => {
+    return fetch(process.env.REACT_APP_API_URL + "/class/" + id, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

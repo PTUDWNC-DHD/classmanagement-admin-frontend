@@ -92,8 +92,8 @@ const fetchPostUser = (token, {username, password, email, name, contact, student
         })
 }
 
-const fetchPatchUser = (token, data) => {
-    return fetch(process.env.REACT_APP_API_URL + "/user/", {
+const fetchPatchUser = (token, id, data) => {
+    return fetch(process.env.REACT_APP_API_URL + "/user/" + id, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
