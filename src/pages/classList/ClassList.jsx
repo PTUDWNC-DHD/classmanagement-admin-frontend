@@ -82,7 +82,7 @@ const sortListByTime = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!classes.length ? <TableRow><TableCell>Class has no teacher</TableCell></TableRow> :
+            {!classes.length ? <TableRow><TableCell>There are no proper class</TableCell></TableRow> :
             classes.map((classe) => (
               <TableRow>
                 <TableCell><ListItemText>{classe.name}</ListItemText></TableCell>
