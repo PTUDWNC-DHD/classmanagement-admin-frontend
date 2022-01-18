@@ -16,6 +16,7 @@ export default function UserList() {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [searchWord, setSearchWord] = useState("");
+  const [isIncrement, setIsIncrement] = useState(true);
 
   
   const callFetchAllUsers = async(token) => {
@@ -24,6 +25,7 @@ export default function UserList() {
     
     if (result.data) {
       setUsers(result.data)
+      setIsIncrement(true);
     }
     else if (result.error) {
       setErrorMessage(result.error)
@@ -71,6 +73,12 @@ export default function UserList() {
     return setUsers(result.data)
   }
 
+const sortListByTime = () => {
+  const sortedList = users.sort((x, y) => (x.createdAt > y.createdAt) == isIncrement ? 0 : -1)
+  setUsers(sortedList)
+  setIsIncrement(!isIncrement)
+}
+
   return (
     <div className="userList">
       <Input value={searchWord} onChange={e => setSearchWord(e.target.value)} />
@@ -89,7 +97,7 @@ export default function UserList() {
               <TableCell><ListItemText><h4>Student Id</h4></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Active</h4></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Lock</h4></ListItemText></TableCell>
-              <TableCell><ListItemText><h4>Create Time</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><Button onClick={sortListByTime}><h4>Create Time</h4></Button></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Action</h4></ListItemText></TableCell>
             </TableRow>
           </TableHead>

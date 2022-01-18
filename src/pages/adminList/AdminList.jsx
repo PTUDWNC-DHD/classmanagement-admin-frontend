@@ -13,6 +13,7 @@ export default function AdminList() {
   const [isLoading, setIsLoading] = useState(true);
   const [admins, setAdmins] = useState([]);
   const [searchWord, setSearchWord] = useState("");
+  const [isIncrement, setIsIncrement] = useState(true);
   
 
   const callFetchAllAdmins = async(token) => {
@@ -58,6 +59,12 @@ export default function AdminList() {
     return setAdmins(result.data)
   }
 
+  const sortListByTime = () => {
+    const sortedList = admins.sort((x, y) => (x.createdAt > y.createdAt) == isIncrement ? 0 : -1)
+    setAdmins(sortedList)
+    setIsIncrement(!isIncrement)
+  }
+  
   return (
     <div className="adminList">
       <Input value={searchWord} onChange={e => setSearchWord(e.target.value)} />
@@ -74,7 +81,7 @@ export default function AdminList() {
               <TableCell><ListItemText><h4>Role</h4></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Email</h4></ListItemText></TableCell>
               <TableCell><ListItemText><h4>username</h4></ListItemText></TableCell>
-              <TableCell><ListItemText><h4>Create Time</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><Button onClick={sortListByTime}><h4>Create Time</h4></Button></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Action</h4></ListItemText></TableCell>
             </TableRow>
           </TableHead>

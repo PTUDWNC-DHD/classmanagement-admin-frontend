@@ -10,6 +10,7 @@ export default function ClassList() {
   const [isLoading, setIsLoading] = useState(true);
   const [classes, setClasses] = useState([]);
   const [searchWord, setSearchWord] = useState("");
+  const [isIncrement, setIsIncrement] = useState(true);
   
   const callFetchAllClasses = async(token) => {
     setIsLoading(true);
@@ -39,6 +40,12 @@ export default function ClassList() {
     )
   } 
  
+const sortListByTime = () => {
+  const sortedList = classes.sort((x, y) => (x.createdAt > y.createdAt) == isIncrement ? 0 : -1)
+  setClasses(sortedList)
+  setIsIncrement(!isIncrement)
+}
+
   const searchHandle = async () => {
     let result = await fetchGetClassList(currentUser.token);
     if (result.error) {
@@ -70,7 +77,7 @@ export default function ClassList() {
               <TableCell><ListItemText><h4>Invite</h4></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Ended</h4></ListItemText></TableCell>
               
-              <TableCell><ListItemText><h4>Create Time</h4></ListItemText></TableCell>
+              <TableCell><ListItemText><Button onClick={sortListByTime}><h4>Create Time</h4></Button></ListItemText></TableCell>
               <TableCell><ListItemText><h4>Action</h4></ListItemText></TableCell>
             </TableRow>
           </TableHead>
